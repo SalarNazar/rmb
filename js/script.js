@@ -21,13 +21,24 @@ const currentYearEl = document.getElementById('current-year');
 currentYearEl.textContent = new Date().getFullYear();
 
 /**
+ * Format a number with comma separators for thousands
+ * @param {number} number - The number to format
+ * @param {number} decimals - Number of decimal places
+ * @returns {string} Formatted number with commas
+ */
+function formatNumberWithCommas(number, decimals = 2) {
+  const fixed = parseFloat(number).toFixed(decimals);
+  return fixed.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+/**
  * Calculate fee and RMB amount based on IQD input
  * @param {number} iqdAmount - Amount in Iraqi Dinar
  * @returns {Object} Object containing fee and RMB amounts
  */
 function calculateValues(iqdAmount) {
   // Ensure input is a valid number
-  const amount = parseFloat(iqdAmount);
+  const amount = parseFloat(iqdAmount.replace(/,/g, ''));
   
   if (isNaN(amount) || amount < 0) {
     return { fee: 0, rmb: 0 };
@@ -40,8 +51,8 @@ function calculateValues(iqdAmount) {
   const rmbAmount = amount * IQD_TO_RMB_RATE;
   
   return {
-    fee: fee.toFixed(2),
-    rmb: rmbAmount.toFixed(2)
+    fee: formatNumberWithCommas(fee),
+    rmb: formatNumberWithCommas(rmbAmount)
   };
 }
 
@@ -58,6 +69,21 @@ function updateResults() {
 }
 
 /**
+ * Format input value with commas as the user types
+ */
+function formatInputWithCommas() {
+  const value = iqdInput.value.replace(/,/g, '');
+  if (value !== '') {
+    const number = parseFloat(value);
+    if (!isNaN(number)) {
+      // Only format if it's a valid number
+      // Use 0 decimals for the input field
+      iqdInput.value = formatNumberWithCommas(number, 0).replace('.00', '');
+    }
+  }
+}
+
+/**
  * Reset the results fields
  */
 function resetResults() {
@@ -67,6 +93,14 @@ function resetResults() {
 
 // Event Listeners
 calculateBtn.addEventListener('click', updateResults);
+
+// Format the input with commas when the user stops typing
+iqdInput.addEventListener('blur', formatInputWithCommas);
+
+// Remove commas when the input field is focused for easier editing
+iqdInput.addEventListener('focus', function() {
+  this.value = this.value.replace(/,/g, '');
+});
 
 // Add input event to update in real-time as well
 iqdInput.addEventListener('input', function() {
