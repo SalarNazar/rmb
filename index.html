@@ -21,13 +21,13 @@
                 <div class="input-group">
                     <label for="iqdAmount">المبلغ بالعراقي:</label>
                     <input 
-                        type="number" 
+                        type="text" 
                         id="iqdAmount" 
                         name="iqdAmount" 
-                        min="0" 
-                        step="any" 
                         placeholder="إدخال المبلغ بالعراقي" 
                         required 
+                        pattern="[0-9,]*"
+                        inputmode="numeric"
                         aria-describedby="iqdHelp">
                     <small id="iqdHelp" class="form-text"> </small>
                 </div>

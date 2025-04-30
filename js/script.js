@@ -27,21 +27,42 @@ currentYearEl.textContent = new Date().getFullYear();
  * @returns {string} Formatted number with commas
  */
 function formatNumberWithCommas(number, decimals = 2) {
-  const fixed = parseFloat(number).toFixed(decimals);
-  return fixed.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // Handle large numbers safely
+  try {
+    const fixed = Number(number).toFixed(decimals);
+    const parts = fixed.toString().split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join('.');
+  } catch (error) {
+    console.error('Error formatting number:', error);
+    return '0.00';
+  }
+}
+
+/**
+ * Parse a number string by removing commas
+ * @param {string} str - The string to parse
+ * @returns {number} The parsed number
+ */
+function parseNumberWithCommas(str) {
+  if (!str) return 0;
+  // Remove all commas and convert to number
+  const cleanNum = str.toString().replace(/,/g, '');
+  const num = Number(cleanNum);
+  return isNaN(num) ? 0 : num;
 }
 
 /**
  * Calculate fee and RMB amount based on IQD input
- * @param {number} iqdAmount - Amount in Iraqi Dinar
+ * @param {string} iqdAmount - Amount in Iraqi Dinar
  * @returns {Object} Object containing fee and RMB amounts
  */
 function calculateValues(iqdAmount) {
-  // Ensure input is a valid number
-  const amount = parseFloat(iqdAmount.replace(/,/g, ''));
+  // Ensure input is a valid number by removing commas
+  const amount = parseNumberWithCommas(iqdAmount);
   
-  if (isNaN(amount) || amount < 0) {
-    return { fee: 0, rmb: 0 };
+  if (amount <= 0) {
+    return { fee: '0.00', rmb: '0.00' };
   }
   
   // Calculate fee (0.3%)
@@ -72,14 +93,30 @@ function updateResults() {
  * Format input value with commas as the user types
  */
 function formatInputWithCommas() {
-  const value = iqdInput.value.replace(/,/g, '');
-  if (value !== '') {
-    const number = parseFloat(value);
-    if (!isNaN(number)) {
-      // Only format if it's a valid number
-      // Use 0 decimals for the input field
-      iqdInput.value = formatNumberWithCommas(number, 0).replace('.00', '');
+  try {
+    // Get the current cursor position before formatting
+    const cursorPosition = iqdInput.selectionStart;
+    const originalLength = iqdInput.value.length;
+    
+    // Only process if there's a value
+    if (iqdInput.value) {
+      // Remove non-numeric characters except commas
+      let value = iqdInput.value.replace(/[^\d,]/g, '');
+      // Then remove all commas to get a clean number
+      const number = parseNumberWithCommas(value);
+      
+      // Format with commas but no decimal places
+      if (!isNaN(number)) {
+        const formatted = formatNumberWithCommas(number, 0).replace(/\.00$/, '');
+        iqdInput.value = formatted;
+        
+        // Adjust cursor position after formatting
+        const newPosition = cursorPosition + (iqdInput.value.length - originalLength);
+        iqdInput.setSelectionRange(newPosition, newPosition);
+      }
     }
+  } catch (error) {
+    console.error('Error in formatInputWithCommas:', error);
   }
 }
 
@@ -94,20 +131,25 @@ function resetResults() {
 // Event Listeners
 calculateBtn.addEventListener('click', updateResults);
 
-// Format the input with commas when the user stops typing
-iqdInput.addEventListener('blur', formatInputWithCommas);
-
-// Remove commas when the input field is focused for easier editing
-iqdInput.addEventListener('focus', function() {
-  this.value = this.value.replace(/,/g, '');
-});
-
-// Add input event to update in real-time as well
-iqdInput.addEventListener('input', function() {
-  if (this.value === '') {
+// Format the input with commas when the user types
+iqdInput.addEventListener('input', function(e) {
+  // Allow only digits and commas
+  const value = this.value;
+  
+  // If the input is cleared, reset results
+  if (value === '') {
     resetResults();
+    return;
+  }
+  
+  // If the value contains invalid characters, clean it
+  if (/[^\d,]/g.test(value)) {
+    this.value = value.replace(/[^\d,]/g, '');
   }
 });
+
+// Format with commas when the user finishes typing
+iqdInput.addEventListener('blur', formatInputWithCommas);
 
 // Handle form reset
 form.addEventListener('reset', resetResults);
