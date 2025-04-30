@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IQD to RMB Calculator</title>
+    <meta name="description" content="Convert Iraqi Dinar (IQD) to Chinese Yuan (RMB) and calculate 0.3% fee">
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Favicon -->
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>IQD to RMB Calculator</h1>
+            <p class="subtitle">Calculate 0.3% fee and convert IQD to RMB</p>
+        </header>
+
+        <main>
+            <form id="calculator-form" class="calculator">
+                <div class="input-group">
+                    <label for="iqdAmount">Enter IQD Amount:</label>
+                    <input 
+                        type="number" 
+                        id="iqdAmount" 
+                        name="iqdAmount" 
+                        min="0" 
+                        step="any" 
+                        placeholder="Enter amount in IQD" 
+                        required 
+                        aria-describedby="iqdHelp">
+                    <small id="iqdHelp" class="form-text">Enter a positive number (Iraqi Dinar amount)</small>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" id="calculateBtn" class="btn">Calculate</button>
+                    <button type="reset" class="btn btn-secondary">Clear</button>
+                </div>
+
+                <div class="results">
+                    <div class="result-group">
+                        <label for="feeResult">0.3% Fee (IQD):</label>
+                        <input type="text" id="feeResult" readonly aria-live="polite">
+                    </div>
+                    
+                    <div class="result-group">
+                        <label for="rmbResult">RMB Value (¥):</label>
+                        <input type="text" id="rmbResult" readonly aria-live="polite">
+                    </div>
+                </div>
+            </form>
+        </main>
+
+        <footer>
+            <p>© <span id="current-year"></span> IQD to RMB Calculator</p>
+            <p>Exchange rate: 1 IQD = 0.00548847420417124 RMB</p>
+        </footer>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
