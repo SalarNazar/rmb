@@ -23,19 +23,17 @@ currentYearEl.textContent = new Date().getFullYear();
 /**
  * Format a number with comma separators for thousands
  * @param {number} number - The number to format
- * @param {number} decimals - Number of decimal places
  * @returns {string} Formatted number with commas
  */
 function formatNumberWithCommas(number) {
   // Handle large numbers safely
   try {
-    const fixed = Number(number).toFixed(2);
-    const parts = fixed.toString().split('.');
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return parts.join('.');
+    // Round to whole number and format with commas
+    const rounded = Math.round(Number(number));
+    return rounded.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   } catch (error) {
     console.error('Error formatting number:', error);
-    return '0.00';
+    return '0';
   }
 }
 
