@@ -8,6 +8,7 @@
 const FEE_RATE = 0.003; // 0.3%
 const IQD_TO_RMB_RATE = 0.00548847420417124; // Exchange rate: 1 IQD = 0.00548847420417124 RMB
 
+// Note: The exchange rate is a placeholder. In a real application, you would fetch this from an API or database.
 // DOM Elements
 const form = document.getElementById('calculator-form');
 const iqdInput = document.getElementById('iqdAmount');
