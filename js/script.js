@@ -62,7 +62,7 @@ function calculateValues(iqdAmount) {
   const amount = parseNumberWithCommas(iqdAmount);
   
   if (amount <= 0) {
-    return { fee: '0.00', rmb: '0.00' };
+    return { fee: '0', rmb: '0' };
   }
   
   // Calculate fee (0.3%)
