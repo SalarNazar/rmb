@@ -12,8 +12,8 @@
 <body>
     <div class="container">
         <header>
-            <h1>IQD to RMB Calculator</h1>
-            <p class="subtitle">Calculate 0.3% fee and convert IQD to RMB</p>
+            <h1>صرف الدينار مقابل اليوان</h1>
+            <p class="subtitle">نسبة المصرف</p>
         </header>
 
         <main>
@@ -29,22 +29,22 @@
                         placeholder="Enter amount in IQD" 
                         required 
                         aria-describedby="iqdHelp">
-                    <small id="iqdHelp" class="form-text">Enter a positive number (Iraqi Dinar amount)</small>
+                    <small id="iqdHelp" class="form-text">إدخال المبلغ بالعراقي</small>
                 </div>
 
                 <div class="button-group">
-                    <button type="button" id="calculateBtn" class="btn">Calculate</button>
-                    <button type="reset" class="btn btn-secondary">Clear</button>
+                    <button type="button" id="calculateBtn" class="btn">احسب</button>
+                    <button type="reset" class="btn btn-secondary">امسح</button>
                 </div>
 
                 <div class="results">
                     <div class="result-group">
-                        <label for="feeResult">0.3% Fee (IQD):</label>
+                        <label for="feeResult">0.3% عمولة المصرف:</label>
                         <input type="text" id="feeResult" readonly aria-live="polite">
                     </div>
                     
                     <div class="result-group">
-                        <label for="rmbResult">RMB Value (¥):</label>
+                        <label for="rmbResult">القيمة باليوان (¥):</label>
                         <input type="text" id="rmbResult" readonly aria-live="polite">
                     </div>
                 </div>
