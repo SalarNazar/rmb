@@ -26,7 +26,7 @@ currentYearEl.textContent = new Date().getFullYear();
  * @param {number} decimals - Number of decimal places
  * @returns {string} Formatted number with commas
  */
-function formatNumberWithCommas(number, decimals = 2) {
+function formatNumberWithCommas(number) {
   // Handle large numbers safely
   try {
     const fixed = Number(number).toFixed(decimals);
