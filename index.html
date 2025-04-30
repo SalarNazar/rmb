@@ -17,6 +17,24 @@
         </header>
 
         <main>
+            <div class="fee-rate-config">
+                <div class="fee-rate-display">
+                    <span>معدل الرسوم الحالي: <span id="currentFeeRate">0.3</span>%</span>
+                    <button type="button" id="editFeeBtn" class="btn-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div id="feeRateEditForm" class="fee-rate-form hidden">
+                    <input type="number" id="feeRateInput" min="0" max="100" step="0.1" placeholder="أدخل النسبة المئوية">
+                    <div class="fee-edit-buttons">
+                        <button type="button" id="saveFeeBtn" class="btn btn-small">حفظ</button>
+                        <button type="button" id="cancelFeeBtn" class="btn btn-small btn-secondary">إلغاء</button>
+                    </div>
+                </div>
+            </div>
+
             <form id="calculator-form" class="calculator">
                 <div class="input-group">
                     <label for="iqdAmount">المبلغ بالعراقي:</label>

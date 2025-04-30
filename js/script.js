@@ -1,14 +1,13 @@
 /**
  * IQD to RMB Calculator
- * - Calculates 0.3% fee from IQD amount
+ * - Calculates fee from IQD amount
  * - Converts IQD to RMB using the current exchange rate
  */
 
 // Constants
-const FEE_RATE = 0.003; // 0.3%
+let FEE_RATE = 0.003; // Default 0.3%
 const IQD_TO_RMB_RATE = 0.00548847420417124; // Exchange rate: 1 IQD = 0.00548847420417124 RMB
 
-// Note: The exchange rate is a placeholder. In a real application, you would fetch this from an API or database.
 // DOM Elements
 const form = document.getElementById('calculator-form');
 const iqdInput = document.getElementById('iqdAmount');
@@ -16,9 +15,30 @@ const calculateBtn = document.getElementById('calculateBtn');
 const feeResult = document.getElementById('feeResult');
 const rmbResult = document.getElementById('rmbResult');
 const currentYearEl = document.getElementById('current-year');
+const currentFeeRateEl = document.getElementById('currentFeeRate');
+const editFeeBtn = document.getElementById('editFeeBtn');
+const feeRateEditForm = document.getElementById('feeRateEditForm');
+const feeRateInput = document.getElementById('feeRateInput');
+const saveFeeBtn = document.getElementById('saveFeeBtn');
+const cancelFeeBtn = document.getElementById('cancelFeeBtn');
 
 // Set current year in footer
 currentYearEl.textContent = new Date().getFullYear();
+
+// Update fee rate display
+function updateFeeRateDisplay() {
+  // Update the displayed fee rate percentage
+  currentFeeRateEl.textContent = (FEE_RATE * 100).toFixed(1);
+  
+  // Update the fee result label if it exists
+  const feeResultLabel = document.querySelector('label[for="feeResult"]');
+  if (feeResultLabel) {
+    feeResultLabel.textContent = `${(FEE_RATE * 100).toFixed(1)}% عمولة المصرف:`;
+  }
+}
+
+// Initialize the fee rate display
+updateFeeRateDisplay();
 
 /**
  * Format a number with comma separators for thousands
@@ -63,7 +83,7 @@ function calculateValues(iqdAmount) {
     return { fee: '0', rmb: '0' };
   }
   
-  // Calculate fee (0.3%)
+  // Calculate fee using current fee rate
   const fee = amount * FEE_RATE;
   
   // Calculate RMB amount
@@ -126,6 +146,67 @@ function resetResults() {
   rmbResult.value = '';
 }
 
+/**
+ * Show fee rate edit form
+ */
+function showFeeRateEditForm() {
+  feeRateInput.value = (FEE_RATE * 100).toFixed(1);
+  feeRateEditForm.classList.remove('hidden');
+}
+
+/**
+ * Hide fee rate edit form
+ */
+function hideFeeRateEditForm() {
+  feeRateEditForm.classList.add('hidden');
+}
+
+/**
+ * Save new fee rate
+ */
+function saveNewFeeRate() {
+  const newFeeRatePercentage = parseFloat(feeRateInput.value);
+  
+  if (isNaN(newFeeRatePercentage) || newFeeRatePercentage < 0 || newFeeRatePercentage > 100) {
+    alert('الرجاء إدخال نسبة مئوية صالحة بين 0 و 100.');
+    return;
+  }
+  
+  // Convert percentage to decimal
+  FEE_RATE = newFeeRatePercentage / 100;
+  
+  // Update fee rate display
+  updateFeeRateDisplay();
+  
+  // Update results if there's an amount entered
+  if (iqdInput.value) {
+    updateResults();
+  }
+  
+  // Hide edit form
+  hideFeeRateEditForm();
+  
+  // Save to local storage for persistence
+  try {
+    localStorage.setItem('feeRate', FEE_RATE.toString());
+  } catch (error) {
+    console.error('Error saving fee rate to local storage:', error);
+  }
+}
+
+// Load saved fee rate from local storage
+function loadSavedFeeRate() {
+  try {
+    const savedFeeRate = localStorage.getItem('feeRate');
+    if (savedFeeRate !== null) {
+      FEE_RATE = parseFloat(savedFeeRate);
+      updateFeeRateDisplay();
+    }
+  } catch (error) {
+    console.error('Error loading saved fee rate:', error);
+  }
+}
+
 // Event Listeners
 calculateBtn.addEventListener('click', updateResults);
 
@@ -151,6 +232,14 @@ iqdInput.addEventListener('blur', formatInputWithCommas);
 
 // Handle form reset
 form.addEventListener('reset', resetResults);
+
+// Fee rate edit event listeners
+editFeeBtn.addEventListener('click', showFeeRateEditForm);
+saveFeeBtn.addEventListener('click', saveNewFeeRate);
+cancelFeeBtn.addEventListener('click', hideFeeRateEditForm);
+
+// Load saved fee rate when the page loads
+document.addEventListener('DOMContentLoaded', loadSavedFeeRate);
 
 // Handle form submission (prevent default behavior)
 form.addEventListener('submit', function(event) {

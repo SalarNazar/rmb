@@ -92,6 +92,61 @@ input[readonly] {
     color: #666;
 }
 
+/* Fee rate configuration styles */
+.fee-rate-config {
+    margin-bottom: 25px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.fee-rate-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95rem;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    color: var(--secondary-color);
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.btn-icon:hover {
+    background-color: rgba(52, 152, 219, 0.1);
+    transform: translateY(-2px);
+}
+
+.fee-rate-form {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.fee-edit-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-small {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+}
+
+.hidden {
+    display: none;
+}
+
 /* Button styles */
 .button-group {
     display: flex;
