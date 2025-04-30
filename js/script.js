@@ -29,7 +29,7 @@ currentYearEl.textContent = new Date().getFullYear();
 function formatNumberWithCommas(number) {
   // Handle large numbers safely
   try {
-    const fixed = Number(number).toFixed(decimals);
+    const fixed = Number(number).toFixed(2);
     const parts = fixed.toString().split('.');
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join('.');
